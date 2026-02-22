@@ -3,6 +3,7 @@ import java.util.*;
 public class OnboardingService {
     private final FakeDb db;
     private final StudentInputParser parser = new StudentInputParser();
+    private final StudentValidator validator = new StudentValidator();
 
     public OnboardingService(FakeDb db) { this.db = db; }
 
@@ -18,11 +19,7 @@ public class OnboardingService {
         String program = data.program;
 
         // validation inline, printing inline
-        List<String> errors = new ArrayList<>();
-        if (name.isBlank()) errors.add("name is required");
-        if (email.isBlank() || !email.contains("@")) errors.add("email is invalid");
-        if (phone.isBlank() || !phone.chars().allMatch(Character::isDigit)) errors.add("phone is invalid");
-        if (!(program.equals("CSE") || program.equals("AI") || program.equals("SWE"))) errors.add("program is invalid");
+        List<String> errors = validator.validate(data);
 
         if (!errors.isEmpty()) {
             System.out.println("ERROR: cannot register");
