@@ -1,38 +1,41 @@
 import java.util.*;
 
 public class OnboardingService {
-    private final FakeDb db;
-    private final StudentInputParser parser = new StudentInputParser();
-    private final StudentValidator validator = new StudentValidator();
-    private final RegistrationPrinter printer = new RegistrationPrinter();
+    private final StudentRepository db;
+    private final InputParser parser;
+    private final StudentValidator validator;
+    private final MessageLogger logger;
 
-    public OnboardingService(FakeDb db) { this.db = db; }
+    public OnboardingService(StudentRepository db) {
+        this.db = db;
+        this.parser = new InputParser();
+        this.validator = new StudentValidator();
+        this.logger = new MessageLogger();
+    }
 
-    // Intentionally violates SRP: parses + validates + creates ID + saves + prints.
     public void registerFromRawInput(String raw) {
         System.out.println("INPUT: " + raw);
 
-        ParsedStudentData data = parser.parse(raw);
+        Map<String,String> kv = parser.parse(raw);
 
-        // validation inline, printing inline
-        List<String> errors = validator.validate(data);
+        String name = kv.getOrDefault("name", "");
+        String email = kv.getOrDefault("email", "");
+        String phone = kv.getOrDefault("phone", "");
+        String program = kv.getOrDefault("program", "");
+
+        List<String> errors = validator.validate(name, email, phone, program);
 
         if (!errors.isEmpty()) {
-            printer.printErrors(errors);
+            System.out.println("ERROR: cannot register");
+            for (String e : errors) System.out.println("- " + e);
             return;
         }
 
-        String id = IdUtil.nextStudentId(db.count());
-
-        StudentRecord rec = new StudentRecord(
-            id,
-            data.name,
-            data.email,
-            data.phone,
-            data.program
-        );
+        String id = IdUtil.nextStudentId();
+        StudentRecord rec = new StudentRecord(id, name, email, phone, program);
 
         db.save(rec);
-        printer.printSuccess(rec, db.count());
+
+        logger.printConfirmation(id, rec, db.count());
     }
 }
