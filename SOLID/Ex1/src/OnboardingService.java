@@ -2,6 +2,7 @@ import java.util.*;
 
 public class OnboardingService {
     private final FakeDb db;
+    private final StudentInputParser parser = new StudentInputParser();
 
     public OnboardingService(FakeDb db) { this.db = db; }
 
@@ -9,17 +10,12 @@ public class OnboardingService {
     public void registerFromRawInput(String raw) {
         System.out.println("INPUT: " + raw);
 
-        Map<String,String> kv = new LinkedHashMap<>();
-        String[] parts = raw.split(";");
-        for (String p : parts) {
-            String[] t = p.split("=", 2);
-            if (t.length == 2) kv.put(t[0].trim(), t[1].trim());
-        }
-
-        String name = kv.getOrDefault("name", "");
-        String email = kv.getOrDefault("email", "");
-        String phone = kv.getOrDefault("phone", "");
-        String program = kv.getOrDefault("program", "");
+        ParsedStudentData data = parser.parse(raw);
+        
+        String name = data.name;
+        String email = data.email;
+        String phone = data.phone;
+        String program = data.program;
 
         // validation inline, printing inline
         List<String> errors = new ArrayList<>();
