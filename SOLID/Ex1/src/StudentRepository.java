@@ -1,3 +1,4 @@
 public interface StudentRepository {
-    void save(StudentRecord student);
+    void save(StudentRecord r);
+    int count();
 }
