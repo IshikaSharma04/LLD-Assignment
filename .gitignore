@@ -9,7 +9,7 @@ Thumbs.db
 *.iml 
  
 # Logs / temp     
-*.log
+*.log 
 tmp/ 
 out/
 build/ 
