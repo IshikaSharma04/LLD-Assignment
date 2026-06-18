@@ -7,7 +7,7 @@ Thumbs.db
 .idea/
 .vscode/
 *.iml
-
+ 
 # Logs / temp   
 *.log
 tmp/ 
