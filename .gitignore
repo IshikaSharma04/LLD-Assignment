@@ -6,7 +6,7 @@
 Thumbs.db
 .idea/
 .vscode/
-*.iml
+*.iml 
  
 # Logs / temp   
 *.log
