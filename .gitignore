@@ -8,7 +8,7 @@ Thumbs.db
 .vscode/
 *.iml
 
-# Logs / temp  
+# Logs / temp   
 *.log
 tmp/ 
 out/
