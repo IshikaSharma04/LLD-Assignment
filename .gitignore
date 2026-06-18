@@ -10,6 +10,6 @@ Thumbs.db
 
 # Logs / temp  
 *.log
-tmp/
+tmp/ 
 out/
 build/ 
